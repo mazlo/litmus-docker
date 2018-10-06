@@ -119,12 +119,6 @@ RUN mkdir /var/log/virtuoso
 # create directory for 4store logs
 RUN mkdir /var/log/4store
 
-
-# create directory and add data
-RUN mkdir graph_data
-ADD ./data/* /graph_data/
-
-
 # create a general directory for all scripts
 RUN mkdir scripts
 
@@ -171,21 +165,21 @@ ADD ./openlink/* /scripts/virtuoso/
 
 
 #Copy all the graph_files
-#RUN mkdir /graph_data
-ADD ./graph_data/* /graph_data/
+RUN mkdir /graph_data
+#ADD ./graph_data/* /graph_data/
 
 #Copy all the rdf_files
 RUN mkdir /rdf_data
-ADD ./rdf_data/* /rdf_data/
+#ADD ./rdf_data/* /rdf_data/
 
 #Copy all the sparql queries
-RUN pwd
+#RUN pwd
 RUN mkdir /sparql_query
-ADD ./sparql_query/* /sparql_query/
+#ADD ./sparql_query/* /sparql_query/
 
 #Copy all the gremlin queries
 RUN mkdir /gremlin_query
-ADD ./gremlin_query/* /gremlin_query/
+#ADD ./gremlin_query/* /gremlin_query/
 
 # create folder for gremlin query for perf
 RUN mkdir /gremlin_query_perf
