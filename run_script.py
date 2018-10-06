@@ -1273,25 +1273,30 @@ def generate_rdf_queries(rdf_query_location, dataFile):
 
     all_sparql = glob.glob(rdf_query_location + "/*.sparql")
     for each in all_sparql:
-        new_file = open("/virtuoso_queries/" + get_name_of_file(each), "w")
         original_file = open(each, "r").read()
-        new_file.write("SPARQL ")
         components = None
+
         if "where" in original_file:
             components = original_file.split("where")
         elif "Where" in original_file:
             components = original_file.split("Where")
         elif "WHERE" in original_file:
             components = original_file.split("WHERE")
+        
+        if components:
+            virtuoso_query = components[0] + " from <http://test.org> where " + components[1]
+            virtuoso_query.strip().strip(";")
+            virtuoso_query = virtuoso_query + ";"
             
-        virtuoso_query = components[0] + " from <http://test.org> where " + components[1]
-        virtuoso_query.strip().strip(";") 
-        virtuoso_query = virtuoso_query + ";"
-        new_file.write(virtuoso_query)
-        new_file.close()
+            new_file = open("/virtuoso_queries/" + get_name_of_file(each), "w")
+            new_file.write("SPARQL ")
+            new_file.write(virtuoso_query)
+            new_file.close()
+
         apache_file = open("/jena_queries/" + get_name_of_file(each), "w")
         apache_file.write(original_file)
         apache_file.close()
+
         fourstore_file = open("/4store_queries/" + get_name_of_file(each), "w")
         fourstore_file.write(original_file.replace("\n", " ").strip(";"))
         fourstore_file.close()
