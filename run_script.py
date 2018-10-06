@@ -294,57 +294,57 @@ def run_perf(command, log_file, clear_cache = False, prelogue = None, epilogue =
     clear_cache_command = "/sbin/sysctl vm.drop_caches=3"
 
     #perf1, perf2, perf3 and perf4 are the four perf sub commands
-    perf1 = "perf stat -o %s --append -e cycles,instructions,cache-references,cache-misses,bus-cycles -a %s" % (log_file+".1", command)
-    perf2 = "perf stat -o %s --append -e L1-dcache-loads,L1-dcache-load-misses,L1-dcache-stores,dTLB-loads,dTLB-load-misses,dTLB-prefetch-misses -a %s" % (log_file + ".2", command)
-    perf3 = "perf stat -o %s --append -e LLC-loads,LLC-load-misses,LLC-stores,LLC-prefetches -a %s" % (log_file + ".3", command)
+    #perf1 = "perf stat -o %s --append -e cycles,instructions,cache-references,cache-misses,bus-cycles -a %s" % (log_file+".1", command)
+    #perf2 = "perf stat -o %s --append -e L1-dcache-loads,L1-dcache-load-misses,L1-dcache-stores,dTLB-loads,dTLB-load-misses,dTLB-prefetch-misses -a %s" % (log_file + ".2", command)
+    #perf3 = "perf stat -o %s --append -e LLC-loads,LLC-load-misses,LLC-stores,LLC-prefetches -a %s" % (log_file + ".3", command)
     perf4 = "perf stat -o %s --append -e branches,branch-misses,context-switches,cpu-migrations,page-faults -a %s" % (log_file + ".4", command)
 
-    logger.info("Perf Command 1: %s " %(perf1))
-    logger.info("Perf Command 2: %s " %(perf2))
-    logger.info("Perf Command 3: %s " %(perf3))
+    #logger.info("Perf Command 1: %s " %(perf1))
+    #logger.info("Perf Command 2: %s " %(perf2))
+    #logger.info("Perf Command 3: %s " %(perf3))
     logger.info("Perf Command 4: %s " %(perf4))
 
-    if clear_cache:
-        subprocess.call(clear_cache_command, shell = True)
-    if prelogue:
-        for each in prelogue:
-            subprocess.call(each, shell = True)
-    print("*****", perf1, "*****")
-    subprocess.call(perf1, shell = True)
-    sys.stdout.flush()
-    if epilogue:
-        for each in epilogue:
-            print(each)
-            subprocess.call(each, shell = True)
-    print("FInished perf1")
+    #if clear_cache:
+    #    subprocess.call(clear_cache_command, shell = True)
+    #if prelogue:
+    #    for each in prelogue:
+    #        subprocess.call(each, shell = True)
+    #print("*****", perf1, "*****")
+    #subprocess.call(perf1, shell = True)
+    #sys.stdout.flush()
+    #if epilogue:
+    #    for each in epilogue:
+    #        print(each)
+    #        subprocess.call(each, shell = True)
+    #print("FInished perf1")
 
-    sys.stdout.flush()
-    if clear_cache:
-        subprocess.call(clear_cache_command, shell = True)
-    if prelogue:
-        for each in prelogue:
-            subprocess.call(each, shell = True)
-    print("*****", perf2, "*****")
-    subprocess.call(perf2, shell = True)
-    if epilogue:
-        for each in epilogue:
-            print(each)
-            subprocess.call(each, shell = True)
-    print("FInished perf2")
-    sys.stdout.flush()
+    #sys.stdout.flush()
+    #if clear_cache:
+    #    subprocess.call(clear_cache_command, shell = True)
+    #if prelogue:
+    #    for each in prelogue:
+    #        subprocess.call(each, shell = True)
+    #print("*****", perf2, "*****")
+    #subprocess.call(perf2, shell = True)
+    #if epilogue:
+    #    for each in epilogue:
+    #        print(each)
+    #        subprocess.call(each, shell = True)
+    #print("FInished perf2")
+    #sys.stdout.flush()
 
-    if clear_cache:
-        subprocess.call(clear_cache_command, shell = True)
-    if prelogue:
-        for each in prelogue:
-            subprocess.call(each, shell = True)
-    print("*****", perf3, "*****")
-    subprocess.call(perf3, shell = True)
-    if epilogue:
-        for each in epilogue:
-            subprocess.call(each, shell = True)
-    print("Finished Perf3")
-    sys.stdout.flush()
+    #if clear_cache:
+    #    subprocess.call(clear_cache_command, shell = True)
+    #if prelogue:
+    #    for each in prelogue:
+    #        subprocess.call(each, shell = True)
+    #print("*****", perf3, "*****")
+    #subprocess.call(perf3, shell = True)
+    #if epilogue:
+    #    for each in epilogue:
+    #        subprocess.call(each, shell = True)
+    #print("Finished Perf3")
+    #sys.stdout.flush()
 
     if clear_cache:
         subprocess.call(clear_cache_command, shell = True)
