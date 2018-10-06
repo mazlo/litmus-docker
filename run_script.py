@@ -2104,6 +2104,8 @@ if __name__ == "__main__":
     parser.add_argument('-ba', '--benchmark_actions', help = 'Pass a string with the actions to be carried out for benchmarking. The three options are "warm_cache", "cold_cache", "load"', required = True)
     parser.add_argument('-n', '--runs', help='Number of times, the experiment should be conducted', required = False)
     
+    parser.add_argument('-lp', '--log-perf-stats', action = "store_true", help = "Generates csv files for all perf stat commands executed", required = False)
+    parser.add_argument('-lc', '--log-combined', action = "store_true", help = "Generates csv files for all perf stat commands executed", required = False)
     
     args = vars(parser.parse_args())
     if not sanity_checks(args):
@@ -2227,17 +2229,20 @@ if __name__ == "__main__":
 #        clean_jena(actions = ["query_hot"])
 #        directory_maps = {'r_jena': 'jena', 'r_virtuoso':'virtuoso'}
         
-        generate_perf_csv_for_all_dms("r_", "temp_rdf.csv", process_files = process_files, list_of_dms = ["r_" + each for each in args['rdf'].split(",")])
+        if args['log_perf_stats']:
+            generate_perf_csv_for_all_dms("r_", "temp_rdf.csv", process_files = process_files, list_of_dms = ["r_" + each for each in args['rdf'].split(",")])
 
-        if args['graph'] and args['rdf']:
-            create_combined_log_file("combined_perf.csv", files = ["temp_graph.csv", "temp_rdf.csv"])
-            if "load" in benchmark_actions:
-                create_combined_log_file("combined.load.logs", files = ["rdf.load.logs", "graph.load.logs"])
-            if "query_hot" in benchmark_actions or "query_cold" in benchmark_actions:
-                create_combined_log_file("combined.query.logs", files = ["rdf.query.logs", "graph.query.logs"])
-        #r_rdf3x_with_perf(1, args['rdf_queries'], name_of_graph)
-        #r_virtuoso_with_perf(1, "/virtuoso_queries" , name_of_graph)
-        #r_rdf3x(total_runs, args['rdf_queries'], name_of_graph)
+        if args['log_combined']:
+            if args['graph'] and args['rdf']:
+                create_combined_log_file("combined_perf.csv", files = ["temp_graph.csv", "temp_rdf.csv"])
+                if "load" in benchmark_actions:
+                    create_combined_log_file("combined.load.logs", files = ["rdf.load.logs", "graph.load.logs"])
+                if "query_hot" in benchmark_actions or "query_cold" in benchmark_actions:
+                    create_combined_log_file("combined.query.logs", files = ["rdf.query.logs", "graph.query.logs"])
+
+#        r_rdf3x_with_perf(1, args['rdf_queries'], name_of_graph)
+#        r_virtuoso_with_perf(1, "/virtuoso_queries" , name_of_graph)
+#        r_rdf3x(total_runs, args['rdf_queries'], name_of_graph)
 #        r_jena(total_runs, "/jena_queries", name_of_graph)
 #        create_csv_from_logs("rdf.load.logs", "rdf.query.logs", rdf_based, False)
 
