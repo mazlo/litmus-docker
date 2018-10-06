@@ -1698,66 +1698,74 @@ def sanity_checks(args):
     logger.info("*"*80)
     logger.info("Running the sanity checks")
     is_sane = True
-    if not os.path.exists(args["graph_datafile"]):
-        print("Incorrect Path.")
-        logger.error("Incorrect path to the graph_datafile argument")
-        return False
-    else:
-        s = glob.glob(args["graph_datafile"] + "/*")
-        print(s)
-        if len(s)!=1:
-            print("Please make sure there is only one file in the specified \
-                graph_datafile directory")
-            logger.error("There has to be only one Graphml file in the directory which is \
-                given as an argument to the graph_datafile argument")
-            return False
-    logger.info("graph_datafile argument is valid")
 
-    if not os.path.exists(args["rdf_datafile"]):
-        logger.error("Incorrect directory supplied to the rdf_datafile argument")
-        print("The directory does not exist")  
-    else:
-        s = glob.glob(args["graph_datafile"] + "/*")
-        if len(s)!=1:
-            print("Please make sure there is only one file in the specified \
-                rdf_datafile directory")
-            logger.error("There has to be only one Graphml file in the directory which is \
-                given as an argument to the graph_datafile argument")
-
+    if args['graph']: 
+        if not os.path.exists(args["graph_datafile"]):
+            print("Incorrect Path.")
+            logger.error("Incorrect path to the graph_datafile argument")
             return False
-    logger.info("rdf_datafile argument is valid")
-  
+        else:
+            s = glob.glob(args["graph_datafile"] + "/*")
+            print(s)
+            if len(s)!=1:
+                print("Please make sure there is one file in the specified \
+                    graph_datafile directory")
+                logger.error("There has to be one Graphml file in the directory which is \
+                    given as an argument to the graph_datafile argument")
+                return False
+
+        logger.info("graph_datafile argument is valid")
+
+    if args['rdf']:
+        if not os.path.exists(args["rdf_datafile"]):
+            logger.error("Incorrect directory supplied to the rdf_datafile argument")
+            print("The directory does not exist")
+            return False
+        else:
+            s = glob.glob(args["rdf_datafile"] + "/*")
+            if len(s)!=1:
+                print("Please make sure there is one file in the specified \
+                    rdf_datafile directory")
+                logger.error("There has to be one triple file in the directory which is \
+                    given as an argument to the rdf_datafile argument")
+
+                return False
+
+        logger.info("rdf_datafile argument is valid")
         
-    if not os.path.exists(args["graph_queries"]):
-        print("The graph query file does not exist")
-        logger.error("The directory supplied as an argument to graph_queries \
+    if args['graph']:
+        if not os.path.exists(args["graph_queries"]):
+            print("The graph query file does not exist")
+            logger.error("The directory supplied as an argument to graph_queries \
                 argument does not exist")
-        return False
-    else:
-        s = glob.glob(args["graph_queries"]+"/gremlin.groovy.*")
-        if len(s)!=2:
-            print("Please make sure that the file gremlin.groovy.hot_cache and \
+            return False
+        else:
+            s = glob.glob(args["graph_queries"]+"/gremlin.groovy.*")
+            if len(s)!=2:
+                print("Please make sure that the file gremlin.groovy.hot_cache and \
                     gremlin.groovy.cold_cache is present in the dataset")
-            logger.error("The directory supplied as an argument needs to have \
-            two files with the name gremlin.groovy.hot_cache and gremlin.groovy.cold_cache")
+                logger.error("The directory supplied as an argument needs to have \
+                    two files with the name gremlin.groovy.hot_cache and gremlin.groovy.cold_cache")
 
-            return False
+                return False
 
-    logger.info("graph_queries argument is valid")
+        logger.info("graph_queries argument is valid")
 
-    if not os.path.exists(args["rdf_queries"]):
-        logger.error("The directory supplied as an argument to rdf_queries \
+    if args['rdf']:
+        if not os.path.exists(args["rdf_queries"]):
+            logger.error("The directory supplied as an argument to rdf_queries \
                 argument does not exist")
-        print("The Sparql queries do not exist")
-    else:
-        s = glob.glob(args["rdf_queries"]+ "/*.sparql")
-        if len(s) == 0:
-            logger.error("Could not find any sparql queries in the path which\
-            was given as an argument to rdf_queries")
-            print("No sparql files exist")
-            return False
+            print("The Sparql queries do not exist")
+        else:
+            s = glob.glob(args["rdf_queries"]+ "/*.sparql")
+            if len(s) == 0:
+                logger.error("Could not find any sparql queries in the path which\
+                    was given as an argument to rdf_queries")
+                print("No sparql files exist")
+                return False
     
-    logger.info("rdf_queries argument is valid")
+        logger.info("rdf_queries argument is valid")
+    
     logger.info("All the arguments are valid") 
     return True
 
@@ -2085,10 +2093,10 @@ def create_combined_log_file(filename, files = []):
 if __name__ == "__main__":
     logger.info("Litmus Benchmark Suite")
     parser = argparse.ArgumentParser(description='The Litmus Benchmark Suite')
-    parser.add_argument('-gd', '--graph_datafile', help='The location of the Graph Database File', required = True)
-    parser.add_argument('-rd', '--rdf_datafile', help='The location of the RDF Database File', required = True)
-    parser.add_argument('-gq', '--graph_queries', help='The location of the Gremlin Queries', required = True)
-    parser.add_argument('-rq', '--rdf_queries', help = 'The location of the Sparql Queries', required = True)    
+    parser.add_argument('-gd', '--graph_datafile', help='The location of the Graph Database File', required = False, default = 'graph_data')
+    parser.add_argument('-rd', '--rdf_datafile', help='The location of the RDF Database File', required = False, default = 'rdf_data')
+    parser.add_argument('-gq', '--graph_queries', help='The location of the Gremlin Queries', required = False, default = 'gremlin_query')
+    parser.add_argument('-rq', '--rdf_queries', help = 'The location of the Sparql Queries', required = False, default = 'sparql_query')    
     parser.add_argument('-v', '--verbose', action = "store_true", help = "Verbose", required = False)
     parser.add_argument('-a','--all', action = "store_true" , help='Run for all DMS', required=False)
     parser.add_argument('-g','--graph', action = "store", help='Pass a string with the names of Graph Based DMS seperated by commas. (eg. "orient,sparksee")', required=False)
@@ -2180,8 +2188,9 @@ if __name__ == "__main__":
         generate_perf_csv_for_all_dms("g_", "temp_graph.csv", process_files = process_files, list_of_dms = ["g_" + each for each in args['graph'].split(",")])
         create_csv_from_logs("graph.load.logs", "graph.query.logs", [each for each in final_list if each[:2] == "g_"], True, actions = benchmark_actions)
 
- #       graph_based = ["g_tinker", "g_sparksee"]
+#        graph_based = ["g_tinker", "g_sparksee"]
 #        create_csv_from_logs("graph.load.logs", "graph.query.logs", graph_based, True)
+
     if args["rdf"]:
         set_java_path(java8 = True)
         name_of_graph = glob.glob(args['rdf_datafile'] + "/*.nt")
@@ -2209,7 +2218,8 @@ if __name__ == "__main__":
             r_4store_with_perf(total_runs, "/4store_queries", name_of_graph, actions = benchmark_actions)
 
         create_csv_from_logs("rdf.load.logs", "rdf.query.logs", [each for each in final_list if each[:2] == "r_"], False, actions = benchmark_actions)
-#            r_jena_with_perf(total_runs, "/4store_queries", args['rdf_datafile'], actions = benchmark_actions)
+
+#        r_jena_with_perf(total_runs, "/4store_queries", args['rdf_datafile'], actions = benchmark_actions)
 #        r_jena_with_perf(1, '/jena_queries', name_of_graph, actions=["query_hot"])
 #        r_rdf3x_with_perf(1, args['rdf_queries'], name_of_graph, actions = ["query_hot"])
 #        r_virtuoso_with_perf(1, '/virtuoso_queries', name_of_graph, actions = ["query_hot"])
