@@ -4,20 +4,9 @@ LABEL maintainer1 "yashwant.keswani@gmail.com"
 LABEL maintainer2 "harsh9t@gmail.com"
 
 # Install packages.
-RUN apt-get update && apt-get install -y \
-            apt-transport-https \
-	    git \
-	    pkg-config \
-            make \
-            gcc-4.7 \
-            build-essential g++ \
-            python3 \
-	    software-properties-common \
-#            default-jre \
-#            default-jdk \
-            unzip \
-            wget \
-     && apt-get clean
+RUN apt-get update && \
+    apt-get install -y apt-transport-https git pkg-config make gcc-4.7 build-essential g++ python3 software-properties-common unzip wget && \
+    apt-get clean
 
 RUN apt-get -y update;
 RUN apt-get -y upgrade; 
@@ -31,9 +20,9 @@ RUN apt-get install -y openjdk-8-jdk
 
 
 # Install gh-rdf3x and clean up
-RUN git clone https://github.com/gh-rdf3x/gh-rdf3x.git \
-    && cd gh-rdf3x \
-    && make
+RUN git clone https://github.com/gh-rdf3x/gh-rdf3x.git && \
+    cd gh-rdf3x && \
+    make
 
 # Install Openlink Virtuoso
 # RUN apt-get update && apt-get install -y openssl
@@ -61,12 +50,12 @@ RUN unzip apache-jena-3.2.0.zip
 
 #Installing open link virtuoso
 RUN apt-get install -y build-essential debhelper autotools-dev autoconf automake unzip wget net-tools git libtool flex bison gperf gawk m4 libssl-dev libreadline-dev libreadline-dev openssl 
-RUN git clone https://github.com/openlink/virtuoso-opensource.git \
-        && cd virtuoso-opensource \
-        && ./autogen.sh \
-        && ./configure \
-        && make && make install 
-
+RUN wget https://github.com/openlink/virtuoso-opensource/releases/download/v7.2.4.2/virtuoso-opensource-7.2.4.2.tar.gz && \
+    tar -xf virtuoso-opensource-7.2.4.2.tar.gz && \
+    cd virtuoso-opensource-7.2.4.2 && \
+    ./autogen.sh && \
+    ./configure && \
+    make && make install
 
 RUN apt-get install -y time
 
@@ -142,7 +131,6 @@ RUN mkdir scripts
 #create directory for Tinker
 RUN mkdir scripts/tinker/
 ADD ./tinker/* /scripts/tinker/
-
 
 #create directory for sparksee
 RUN mkdir scripts/sparksee/
