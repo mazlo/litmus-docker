@@ -294,57 +294,57 @@ def run_perf(command, log_file, clear_cache = False, prelogue = None, epilogue =
     clear_cache_command = "/sbin/sysctl vm.drop_caches=3"
 
     #perf1, perf2, perf3 and perf4 are the four perf sub commands
-    perf1 = "perf stat -o %s --append -e cycles,instructions,cache-references,cache-misses,bus-cycles -a %s" % (log_file+".1", command)
-    perf2 = "perf stat -o %s --append -e L1-dcache-loads,L1-dcache-load-misses,L1-dcache-stores,dTLB-loads,dTLB-load-misses,dTLB-prefetch-misses -a %s" % (log_file + ".2", command)
-    perf3 = "perf stat -o %s --append -e LLC-loads,LLC-load-misses,LLC-stores,LLC-prefetches -a %s" % (log_file + ".3", command)
+    #perf1 = "perf stat -o %s --append -e cycles,instructions,cache-references,cache-misses,bus-cycles -a %s" % (log_file+".1", command)
+    #perf2 = "perf stat -o %s --append -e L1-dcache-loads,L1-dcache-load-misses,L1-dcache-stores,dTLB-loads,dTLB-load-misses,dTLB-prefetch-misses -a %s" % (log_file + ".2", command)
+    #perf3 = "perf stat -o %s --append -e LLC-loads,LLC-load-misses,LLC-stores,LLC-prefetches -a %s" % (log_file + ".3", command)
     perf4 = "perf stat -o %s --append -e branches,branch-misses,context-switches,cpu-migrations,page-faults -a %s" % (log_file + ".4", command)
 
-    logger.info("Perf Command 1: %s " %(perf1))
-    logger.info("Perf Command 2: %s " %(perf2))
-    logger.info("Perf Command 3: %s " %(perf3))
+    #logger.info("Perf Command 1: %s " %(perf1))
+    #logger.info("Perf Command 2: %s " %(perf2))
+    #logger.info("Perf Command 3: %s " %(perf3))
     logger.info("Perf Command 4: %s " %(perf4))
 
-    if clear_cache:
-        subprocess.call(clear_cache_command, shell = True)
-    if prelogue:
-        for each in prelogue:
-            subprocess.call(each, shell = True)
-    print("*****", perf1, "*****")
-    subprocess.call(perf1, shell = True)
-    sys.stdout.flush()
-    if epilogue:
-        for each in epilogue:
-            print(each)
-            subprocess.call(each, shell = True)
-    print("FInished perf1")
+    #if clear_cache:
+    #    subprocess.call(clear_cache_command, shell = True)
+    #if prelogue:
+    #    for each in prelogue:
+    #        subprocess.call(each, shell = True)
+    #print("*****", perf1, "*****")
+    #subprocess.call(perf1, shell = True)
+    #sys.stdout.flush()
+    #if epilogue:
+    #    for each in epilogue:
+    #        print(each)
+    #        subprocess.call(each, shell = True)
+    #print("FInished perf1")
 
-    sys.stdout.flush()
-    if clear_cache:
-        subprocess.call(clear_cache_command, shell = True)
-    if prelogue:
-        for each in prelogue:
-            subprocess.call(each, shell = True)
-    print("*****", perf2, "*****")
-    subprocess.call(perf2, shell = True)
-    if epilogue:
-        for each in epilogue:
-            print(each)
-            subprocess.call(each, shell = True)
-    print("FInished perf2")
-    sys.stdout.flush()
+    #sys.stdout.flush()
+    #if clear_cache:
+    #    subprocess.call(clear_cache_command, shell = True)
+    #if prelogue:
+    #    for each in prelogue:
+    #        subprocess.call(each, shell = True)
+    #print("*****", perf2, "*****")
+    #subprocess.call(perf2, shell = True)
+    #if epilogue:
+    #    for each in epilogue:
+    #        print(each)
+    #        subprocess.call(each, shell = True)
+    #print("FInished perf2")
+    #sys.stdout.flush()
 
-    if clear_cache:
-        subprocess.call(clear_cache_command, shell = True)
-    if prelogue:
-        for each in prelogue:
-            subprocess.call(each, shell = True)
-    print("*****", perf3, "*****")
-    subprocess.call(perf3, shell = True)
-    if epilogue:
-        for each in epilogue:
-            subprocess.call(each, shell = True)
-    print("Finished Perf3")
-    sys.stdout.flush()
+    #if clear_cache:
+    #    subprocess.call(clear_cache_command, shell = True)
+    #if prelogue:
+    #    for each in prelogue:
+    #        subprocess.call(each, shell = True)
+    #print("*****", perf3, "*****")
+    #subprocess.call(perf3, shell = True)
+    #if epilogue:
+    #    for each in epilogue:
+    #        subprocess.call(each, shell = True)
+    #print("Finished Perf3")
+    #sys.stdout.flush()
 
     if clear_cache:
         subprocess.call(clear_cache_command, shell = True)
@@ -1698,66 +1698,74 @@ def sanity_checks(args):
     logger.info("*"*80)
     logger.info("Running the sanity checks")
     is_sane = True
-    if not os.path.exists(args["graph_datafile"]):
-        print("Incorrect Path.")
-        logger.error("Incorrect path to the graph_datafile argument")
-        return False
-    else:
-        s = glob.glob(args["graph_datafile"] + "/*")
-        print(s)
-        if len(s)!=1:
-            print("Please make sure there is only one file in the specified \
-                graph_datafile directory")
-            logger.error("There has to be only one Graphml file in the directory which is \
-                given as an argument to the graph_datafile argument")
-            return False
-    logger.info("graph_datafile argument is valid")
 
-    if not os.path.exists(args["rdf_datafile"]):
-        logger.error("Incorrect directory supplied to the rdf_datafile argument")
-        print("The directory does not exist")  
-    else:
-        s = glob.glob(args["graph_datafile"] + "/*")
-        if len(s)!=1:
-            print("Please make sure there is only one file in the specified \
-                rdf_datafile directory")
-            logger.error("There has to be only one Graphml file in the directory which is \
-                given as an argument to the graph_datafile argument")
-
+    if args['graph']: 
+        if not os.path.exists(args["graph_datafile"]):
+            print("Incorrect Path.")
+            logger.error("Incorrect path to the graph_datafile argument")
             return False
-    logger.info("rdf_datafile argument is valid")
-  
+        else:
+            s = glob.glob(args["graph_datafile"] + "/*")
+            print(s)
+            if len(s)!=1:
+                print("Please make sure there is one file in the specified \
+                    graph_datafile directory")
+                logger.error("There has to be one Graphml file in the directory which is \
+                    given as an argument to the graph_datafile argument")
+                return False
+
+        logger.info("graph_datafile argument is valid")
+
+    if args['rdf']:
+        if not os.path.exists(args["rdf_datafile"]):
+            logger.error("Incorrect directory supplied to the rdf_datafile argument")
+            print("The directory does not exist")
+            return False
+        else:
+            s = glob.glob(args["rdf_datafile"] + "/*")
+            if len(s)!=1:
+                print("Please make sure there is one file in the specified \
+                    rdf_datafile directory")
+                logger.error("There has to be one triple file in the directory which is \
+                    given as an argument to the rdf_datafile argument")
+
+                return False
+
+        logger.info("rdf_datafile argument is valid")
         
-    if not os.path.exists(args["graph_queries"]):
-        print("The graph query file does not exist")
-        logger.error("The directory supplied as an argument to graph_queries \
+    if args['graph']:
+        if not os.path.exists(args["graph_queries"]):
+            print("The graph query file does not exist")
+            logger.error("The directory supplied as an argument to graph_queries \
                 argument does not exist")
-        return False
-    else:
-        s = glob.glob(args["graph_queries"]+"/gremlin.groovy.*")
-        if len(s)!=2:
-            print("Please make sure that the file gremlin.groovy.hot_cache and \
+            return False
+        else:
+            s = glob.glob(args["graph_queries"]+"/gremlin.groovy.*")
+            if len(s)!=2:
+                print("Please make sure that the file gremlin.groovy.hot_cache and \
                     gremlin.groovy.cold_cache is present in the dataset")
-            logger.error("The directory supplied as an argument needs to have \
-            two files with the name gremlin.groovy.hot_cache and gremlin.groovy.cold_cache")
+                logger.error("The directory supplied as an argument needs to have \
+                    two files with the name gremlin.groovy.hot_cache and gremlin.groovy.cold_cache")
 
-            return False
+                return False
 
-    logger.info("graph_queries argument is valid")
+        logger.info("graph_queries argument is valid")
 
-    if not os.path.exists(args["rdf_queries"]):
-        logger.error("The directory supplied as an argument to rdf_queries \
+    if args['rdf']:
+        if not os.path.exists(args["rdf_queries"]):
+            logger.error("The directory supplied as an argument to rdf_queries \
                 argument does not exist")
-        print("The Sparql queries do not exist")
-    else:
-        s = glob.glob(args["rdf_queries"]+ "/*.sparql")
-        if len(s) == 0:
-            logger.error("Could not find any sparql queries in the path which\
-            was given as an argument to rdf_queries")
-            print("No sparql files exist")
-            return False
+            print("The Sparql queries do not exist")
+        else:
+            s = glob.glob(args["rdf_queries"]+ "/*.sparql")
+            if len(s) == 0:
+                logger.error("Could not find any sparql queries in the path which\
+                    was given as an argument to rdf_queries")
+                print("No sparql files exist")
+                return False
     
-    logger.info("rdf_queries argument is valid")
+        logger.info("rdf_queries argument is valid")
+    
     logger.info("All the arguments are valid") 
     return True
 
@@ -2085,10 +2093,10 @@ def create_combined_log_file(filename, files = []):
 if __name__ == "__main__":
     logger.info("Litmus Benchmark Suite")
     parser = argparse.ArgumentParser(description='The Litmus Benchmark Suite')
-    parser.add_argument('-gd', '--graph_datafile', help='The location of the Graph Database File', required = True)
-    parser.add_argument('-rd', '--rdf_datafile', help='The location of the RDF Database File', required = True)
-    parser.add_argument('-gq', '--graph_queries', help='The location of the Gremlin Queries', required = True)
-    parser.add_argument('-rq', '--rdf_queries', help = 'The location of the Sparql Queries', required = True)    
+    parser.add_argument('-gd', '--graph_datafile', help='The location of the Graph Database File', required = False, default = 'graph_data')
+    parser.add_argument('-rd', '--rdf_datafile', help='The location of the RDF Database File', required = False, default = 'rdf_data')
+    parser.add_argument('-gq', '--graph_queries', help='The location of the Gremlin Queries', required = False, default = 'gremlin_query')
+    parser.add_argument('-rq', '--rdf_queries', help = 'The location of the Sparql Queries', required = False, default = 'sparql_query')    
     parser.add_argument('-v', '--verbose', action = "store_true", help = "Verbose", required = False)
     parser.add_argument('-a','--all', action = "store_true" , help='Run for all DMS', required=False)
     parser.add_argument('-g','--graph', action = "store", help='Pass a string with the names of Graph Based DMS seperated by commas. (eg. "orient,sparksee")', required=False)
@@ -2096,6 +2104,8 @@ if __name__ == "__main__":
     parser.add_argument('-ba', '--benchmark_actions', help = 'Pass a string with the actions to be carried out for benchmarking. The three options are "warm_cache", "cold_cache", "load"', required = True)
     parser.add_argument('-n', '--runs', help='Number of times, the experiment should be conducted', required = False)
     
+    parser.add_argument('-lp', '--log-perf-stats', action = "store_true", help = "Generates csv files for all perf stat commands executed", required = False)
+    parser.add_argument('-lc', '--log-combined', action = "store_true", help = "Generates csv files for all perf stat commands executed", required = False)
     
     args = vars(parser.parse_args())
     if not sanity_checks(args):
@@ -2180,8 +2190,9 @@ if __name__ == "__main__":
         generate_perf_csv_for_all_dms("g_", "temp_graph.csv", process_files = process_files, list_of_dms = ["g_" + each for each in args['graph'].split(",")])
         create_csv_from_logs("graph.load.logs", "graph.query.logs", [each for each in final_list if each[:2] == "g_"], True, actions = benchmark_actions)
 
- #       graph_based = ["g_tinker", "g_sparksee"]
+#        graph_based = ["g_tinker", "g_sparksee"]
 #        create_csv_from_logs("graph.load.logs", "graph.query.logs", graph_based, True)
+
     if args["rdf"]:
         set_java_path(java8 = True)
         name_of_graph = glob.glob(args['rdf_datafile'] + "/*.nt")
@@ -2209,7 +2220,8 @@ if __name__ == "__main__":
             r_4store_with_perf(total_runs, "/4store_queries", name_of_graph, actions = benchmark_actions)
 
         create_csv_from_logs("rdf.load.logs", "rdf.query.logs", [each for each in final_list if each[:2] == "r_"], False, actions = benchmark_actions)
-#            r_jena_with_perf(total_runs, "/4store_queries", args['rdf_datafile'], actions = benchmark_actions)
+
+#        r_jena_with_perf(total_runs, "/4store_queries", args['rdf_datafile'], actions = benchmark_actions)
 #        r_jena_with_perf(1, '/jena_queries', name_of_graph, actions=["query_hot"])
 #        r_rdf3x_with_perf(1, args['rdf_queries'], name_of_graph, actions = ["query_hot"])
 #        r_virtuoso_with_perf(1, '/virtuoso_queries', name_of_graph, actions = ["query_hot"])
@@ -2217,17 +2229,20 @@ if __name__ == "__main__":
 #        clean_jena(actions = ["query_hot"])
 #        directory_maps = {'r_jena': 'jena', 'r_virtuoso':'virtuoso'}
         
-        generate_perf_csv_for_all_dms("r_", "temp_rdf.csv", process_files = process_files, list_of_dms = ["r_" + each for each in args['rdf'].split(",")])
+        if args['log_perf_stats']:
+            generate_perf_csv_for_all_dms("r_", "temp_rdf.csv", process_files = process_files, list_of_dms = ["r_" + each for each in args['rdf'].split(",")])
 
-        if args['graph'] and args['rdf']:
-            create_combined_log_file("combined_perf.csv", files = ["temp_graph.csv", "temp_rdf.csv"])
-            if "load" in benchmark_actions:
-                create_combined_log_file("combined.load.logs", files = ["rdf.load.logs", "graph.load.logs"])
-            if "query_hot" in benchmark_actions or "query_cold" in benchmark_actions:
-                create_combined_log_file("combined.query.logs", files = ["rdf.query.logs", "graph.query.logs"])
-        #r_rdf3x_with_perf(1, args['rdf_queries'], name_of_graph)
-        #r_virtuoso_with_perf(1, "/virtuoso_queries" , name_of_graph)
-        #r_rdf3x(total_runs, args['rdf_queries'], name_of_graph)
+        if args['log_combined']:
+            if args['graph'] and args['rdf']:
+                create_combined_log_file("combined_perf.csv", files = ["temp_graph.csv", "temp_rdf.csv"])
+                if "load" in benchmark_actions:
+                    create_combined_log_file("combined.load.logs", files = ["rdf.load.logs", "graph.load.logs"])
+                if "query_hot" in benchmark_actions or "query_cold" in benchmark_actions:
+                    create_combined_log_file("combined.query.logs", files = ["rdf.query.logs", "graph.query.logs"])
+
+#        r_rdf3x_with_perf(1, args['rdf_queries'], name_of_graph)
+#        r_virtuoso_with_perf(1, "/virtuoso_queries" , name_of_graph)
+#        r_rdf3x(total_runs, args['rdf_queries'], name_of_graph)
 #        r_jena(total_runs, "/jena_queries", name_of_graph)
 #        create_csv_from_logs("rdf.load.logs", "rdf.query.logs", rdf_based, False)
 
