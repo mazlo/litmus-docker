@@ -64,14 +64,11 @@ RUN apt-get install -y software-properties-common
 RUN apt-get -y update
 
 RUN apt-get install -y libglib2.0-dev libraptor2-dev librasqal3-dev uuid-dev libreadline-dev lib32ncurses5-dev
-RUN wget https://4store.danielknoell.de/download/4store-v1.1.5.tar.gz
-RUN tar -xf 4store-v1.1.5.tar.gz
+ADD ./4store-v1.1.5.tar.gz .
 RUN cd 4store-v1.1.5 \
     && ./configure \
     && make \
     && make install
-
-
 
 #RUN add-apt-repository -y ppa:webupd8team/java 
 #RUN apt-get update 
